@@ -19,16 +19,11 @@ object Day1 extends IOApp.Simple {
 
   override def run: IO[Unit] =
     for {
-      lines <- readElfsFile
+      lines <- readInput("day1-list.txt")
       numbers = lines.map(extractLineNumber)
       result = numbers.sum
       _ <- IO.println(s"Sum of all Calibration values : ${result}")
     } yield ()
-
-  private def readElfsFile: IO[List[String]] =
-    Resource
-      .fromAutoCloseable(IO(Source.fromResource("day1-list.txt")))
-      .use(src => IO(src.getLines().toList))
 
   private def extractLineNumber(line: String): Int = {
     def splitStringAtNumbers(line: String): List[String | Int] = {

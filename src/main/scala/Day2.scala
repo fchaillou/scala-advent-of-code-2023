@@ -6,7 +6,7 @@ import scala.io.Source
 object Day2 extends IOApp.Simple {
 
   override def run: IO[Unit] = for {
-    lines <- readInput
+    lines <- readInput("day2-input.txt")
     games = lines.map(Game.parse)
     input = Possibility(blue = 14, red = 12, green = 13)
     possibleGames = games.filter(_.isPossible(input))
@@ -16,11 +16,6 @@ object Day2 extends IOApp.Simple {
     summedPowers = powers.sum
     _ <- IO.println(s"Part 2 result is $summedPowers")
   } yield ()
-
-  private def readInput: IO[List[String]] =
-    Resource
-      .fromAutoCloseable(IO(Source.fromResource("day2-input.txt")))
-      .use(src => IO(src.getLines().toList))
 }
 
 object Possibility {

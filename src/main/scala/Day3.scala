@@ -34,8 +34,8 @@ enum Element {
 
 object Day3 extends IOApp.Simple {
   override def run: IO[Unit] = for {
-    lines <- readInput
-    engineSchematics = readEngineSchematics(lines)
+    lines <- readInput("day3-input.txt")
+    engineSchematics = readEngineSchematics(lines.toVector)
     numbers = engineSchematics.zipWithIndex.flatMap((elements, line) => parseNumbersWithCoordinates(line, elements))
     engineParts = numbers.filter(_.isEnginePart(engineSchematics))
     ignoredParts = numbers.diff(engineParts)
@@ -46,11 +46,6 @@ object Day3 extends IOApp.Simple {
     gearsTotal = adjacentGears.map((g1, g2) => g1.value * g2.value).sum
     _ <- IO.println(s"Part2 is $gearsTotal")
   } yield ()
-
-  private def readInput: IO[Vector[String]] =
-     Resource
-        .fromAutoCloseable(IO(Source.fromResource("day3-input.txt")))
-        .use(src => IO(src.getLines().toVector))
 
   private def readEngineSchematics(lines: Vector[String]): Vector[Vector[Element]] =
     lines.map(l => l.toVector.map{
